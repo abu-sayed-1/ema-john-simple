@@ -20,21 +20,21 @@ import ProductDetail from './components/ProductDetail/ProductDetail';
        <Router>
         <Header></Header>
          <Switch>
-           <Router exact path='/shop'>
+           <Route exact path='/shop'>
            <Shop></Shop>
-           </Router>
-           <Router path="/review">
+           </Route>
+           <Route path="/review">
             <Review></Review>
-           </Router>
-           <Router path="/inventory">
+           </Route>
+           <Route path="/inventory">
              <Inventory></Inventory>
-           </Router>
-           <Router exact path="/">
+           </Route>
+           <Route exact path="/">
             <Shop></Shop>
-           </Router>
-           <Router path="/product/:productKey">
+           </Route>
+           <Route path="/product/:productKey">
             <ProductDetail></ProductDetail>
-           </Router>
+           </Route>
            <Route path="*">
            <NotFound></NotFound>
            </Route>
