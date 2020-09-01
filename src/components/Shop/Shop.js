@@ -6,13 +6,12 @@ import Cart from '../Cart/Cart';
 const Shop = () => { 
      const first10 = fakeData.slice(0,10);
      const [products,setProducts] = useState(first10)
-
      const [cart,setCart] = useState([])
 
      const handleAddProduct = (product) =>{
          const newCart = [...cart,product]
          setCart(newCart)
-         console.log('Rakib',product)
+        //  console.log('Rakib',product)
      }
 
      return (
@@ -22,7 +21,7 @@ const Shop = () => {
                  {
                      products.map(pd => 
                      <Product 
-                      product={pd} handleAddProduct={handleAddProduct}
+                      product={pd} key={pd.key} handleAddProduct={handleAddProduct}
                     ></Product>)
                  }
             </div>
