@@ -17,7 +17,6 @@ import ProductDetail from './components/ProductDetail/ProductDetail';
  function App() {
    return (
      <div>
-       <h1>rakibnk</h1>
        <Router>
         <Header></Header>
          <Switch>
