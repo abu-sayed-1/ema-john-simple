@@ -6,14 +6,14 @@ const PrivateRoute = ({children, ...rest}) => {
     const [loggedInUser,setLoggedInUser] = useContext(UserContext)
     return (
        
-            <Route
+     <Route
       {...rest}
       render={({ location }) =>
       loggedInUser.email ? (
           children
         ) : (
           <Redirect
-            to={{
+            to={{ 
               pathname: "/login",
               state: { from: location }
             }}
