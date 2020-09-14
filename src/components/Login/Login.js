@@ -2,11 +2,12 @@
  import React, { useContext, useState } from 'react';
  import { UserContext } from '../../App';
  import { useHistory, useLocation } from 'react-router-dom';
- import { handleFBSignIn, handleGoogleSingIn, handleSignOut, initializeLoginFramework } from './LoginManager';
+ import {createUserWithEmailAndPassword, handleFBSignIn, handleGoogleSingIn, handleSignOut, initializeLoginFramework, signInWithEmailAndPassword } from './LoginManager';
  
 
   //  organize firebase Auth/..after
  const Login = () => {
+
    const [newUser,setNewUser] = useState(false);
    const [user,setUser] = useState({
      isSignIn:false,
@@ -26,37 +27,48 @@
    const googleSingIn = () => {
      handleGoogleSingIn()
      .then (res => {
-       setUser(res);
-       setLoggedInUser(res);
-       history.replace(from);
+      handleResponse(res,true)
      })
    }
  
    const signOut = () => {
      handleSignOut()
      .then(res => {
-       setUser(res);
-       setLoggedInUser(res);
+      handleResponse(res,false);
      })
    }
+
+   
+  const handleResponse = (res,redirect) => {
+    setUser(res);
+    setLoggedInUser(res);
+    if (redirect) {
+     history.replace(from);
+    }
+  }
  
    const fBSignIn = () => {
      handleFBSignIn()
      .then(res => {
-       setUser(res);
-       setLoggedInUser(res); 
-       history.replace(from);
+      handleResponse(res,true)
+      
      })
-   }
+     
+   };
  
  // handle Submit Area--------------------------------------------------------
  const handleSubmit = (e) => {
-   console.log(user.email,user.password);
    if (newUser && user.email && user.password) {
-    
+     createUserWithEmailAndPassword(user.name,user.email,user.password)
+     .then(res => {
+     handleResponse(res,true);
+     })
    }
    if (!newUser && user.email && user.password) {
-    
+    signInWithEmailAndPassword(user.email,user.password)
+     .then(res => {
+      handleResponse(res,true);
+     })
    }
  e.preventDefault();
  }
