@@ -22,9 +22,8 @@ export const UserContext = createContext();
   const [loggedInUser,setLoggedInUser] = useState({});
    return (
      
-       <UserContext.Provider value={[loggedInUser,setLoggedInUser]}>
-         <h1>email:{loggedInUser.email}</h1>
-         <Router>
+     <UserContext.Provider value={[loggedInUser,setLoggedInUser]}>
+      <Router>
        <Header></Header>
         <Switch>
           <Route exact path='/shop'>
@@ -33,7 +32,7 @@ export const UserContext = createContext();
           <Route path="/review">
            <Review></Review>
           </Route>
-          <PrivateRoute path="/inventory">
+          <PrivateRoute path="/orders">
             <Inventory></Inventory>
           </PrivateRoute>
           <Route path="/login">
@@ -50,10 +49,10 @@ export const UserContext = createContext();
           </Route>
           <Route path="*">
           <NotFound></NotFound>
-          </Route>
+         </Route>
         </Switch>
       </Router>
-      </UserContext.Provider>
+     </UserContext.Provider>
     
    );
  }
