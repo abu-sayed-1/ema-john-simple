@@ -10,8 +10,7 @@ const Shipment = () => {
     console.log('form submitted',data)
     
   };
-
-
+ 
   return (
 
      <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>

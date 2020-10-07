@@ -80,6 +80,7 @@ export const handleFBSignIn = () =>{
       newUserInfo.error = '';
       newUserInfo.success = true;
       updateUserName(name);
+      verifyEmail();
       return newUserInfo;
   })
   .catch(error => {
@@ -118,4 +119,15 @@ const updateUserName = name => {
   .catch( error => {
     console.log(error)
   });
+}
+
+
+const verifyEmail = () => {
+      var user = firebase.auth().currentUser;
+
+    user.sendEmailVerification().then(function() {
+      // Email sent.
+    }).catch(function(error) {
+      // An error happened.
+    });
 }

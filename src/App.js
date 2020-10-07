@@ -32,7 +32,7 @@ export const UserContext = createContext();
           <Route path="/review">
            <Review></Review>
           </Route>
-          <PrivateRoute path="/orders">
+          <PrivateRoute path="/inventory">
             <Inventory></Inventory>
           </PrivateRoute>
           <Route path="/login">

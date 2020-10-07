@@ -50,6 +50,7 @@
    const fBSignIn = () => {
      handleFBSignIn()
      .then(res => {
+       console.log(res)
       handleResponse(res,true)
       
      })
