@@ -20,7 +20,7 @@ const Review = () => {
         setCart(newCart);
         removeFromDatabaseCart(productKey);
     }
-
+//        0022 -------------------------
     useEffect(() => {
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart)
@@ -34,8 +34,10 @@ const Review = () => {
         })
             .then(res => res.json())
             .then(data => setCart(data))
-
     }, [])
+// multpul key diye ^^^0022^^^^^^^^^^^  server theke product niye astechi ei karne  GET na kore POST method use korchi
+
+
     let thankYou;
     if (proceedCheckout) {
         thankYou = <img src={happyImage} alt="" />
