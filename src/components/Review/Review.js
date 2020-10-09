@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { getDatabaseCart, removeFromDatabaseCart, processOrder } from '../../utilities/databaseManager';
 import ReviewItem from '../ReviewItem/ReviewItem';
 import Cart from '../Cart/Cart';
-import happyImage from '../../images/giphy.gif';
 import { useHistory } from 'react-router-dom';
+
+
 const Review = () => {
     const [cart, setCart] = useState([]);
     const [proceedCheckout, setProceedCheckout] = useState(false);
@@ -20,12 +21,12 @@ const Review = () => {
         setCart(newCart);
         removeFromDatabaseCart(productKey);
     }
-//        0022 -------------------------
+    //        0022 -------------------------
     useEffect(() => {
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart)
 
-        fetch('http://localhost:5000/productsByKeys', {
+        fetch('https://boiling-wave-04634.herokuapp.com/productsByKeys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,14 +36,9 @@ const Review = () => {
             .then(res => res.json())
             .then(data => setCart(data))
     }, [])
-// multpul key diye ^^^0022^^^^^^^^^^^  server theke product niye astechi ei karne  GET na kore POST method use korchi
+    // multpul key diye ^^^0022^^^^^^^^^^^  server theke product niye astechi ei karne  GET na kore POST method use korchi
 
-
-    let thankYou;
-    if (proceedCheckout) {
-        thankYou = <img src={happyImage} alt="" />
-    }
-
+    document.title = "Review Page"
     return (
         <div className="twin-container">
             <div className="product-container">
@@ -52,7 +48,6 @@ const Review = () => {
                         removeProduct={removeProduct}></ReviewItem>)
 
                 }
-                {thankYou}
             </div>
             <div className="cart-container">
                 <Cart cart={cart}></Cart>

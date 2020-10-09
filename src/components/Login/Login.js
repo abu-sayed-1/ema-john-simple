@@ -1,138 +1,142 @@
 
- import React, { useContext, useState } from 'react';
- import { UserContext } from '../../App';
- import { useHistory, useLocation } from 'react-router-dom';
- import {createUserWithEmailAndPassword, handleFBSignIn, handleGoogleSingIn, handleSignOut, initializeLoginFramework, signInWithEmailAndPassword } from './LoginManager';
- 
+import React, { useContext, useState } from 'react';
+import { UserContext } from '../../App';
+import { useHistory, useLocation } from 'react-router-dom';
+import { createUserWithEmailAndPassword, handleFBSignIn, handleGoogleSingIn, handleSignOut, initializeLoginFramework, signInWithEmailAndPassword } from './LoginManager';
 
-  //  organize firebase Auth/..after
- const Login = () => {
 
-   const [newUser,setNewUser] = useState(false);
-   const [user,setUser] = useState({
-     isSignIn:false,
-     name:'',
-     email:'',
-     photo:'',
-     password:'',
-     error:''
-   })
-   
-   initializeLoginFramework();
-   const [loggedInUser,setLoggedInUser] = useContext(UserContext);
-   const history = useHistory();
-   const location = useLocation();
-   let { from } = location.state || { from: {pathname: "/"} };
-  
-   const googleSingIn = () => {
-     handleGoogleSingIn()
-     .then (res => {
-      handleResponse(res,true)
-     })
-   }
- 
-   const signOut = () => {
-     handleSignOut()
-     .then(res => {
-      handleResponse(res,false);
-     })
-   }
+//  organize firebase Auth/..after
+const Login = () => {
 
-   
-  const handleResponse = (res,redirect) => {
+  const [newUser, setNewUser] = useState(false);
+  const [user, setUser] = useState({
+    isSignIn: false,
+    name: '',
+    email: '',
+    photo: '',
+    password: '',
+    error: ''
+  })
+
+  initializeLoginFramework();
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const history = useHistory();
+  const location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
+
+  const googleSingIn = () => {
+    handleGoogleSingIn()
+      .then(res => {
+        handleResponse(res, true)
+      })
+  }
+
+  const signOut = () => {
+    handleSignOut()
+      .then(res => {
+        handleResponse(res, false);
+      })
+  }
+
+
+  const handleResponse = (res, redirect) => {
     setUser(res);
     setLoggedInUser(res);
     if (redirect) {
-     history.replace(from);
+      history.replace(from);
     }
   }
- 
-   const fBSignIn = () => {
-     handleFBSignIn()
-     .then(res => {
-       console.log(res)
-      handleResponse(res,true)
-      
-     })
-     
-   };
- 
- // handle Submit Area--------------------------------------------------------
- const handleSubmit = (e) => {
-   if (newUser && user.email && user.password) {
-     createUserWithEmailAndPassword(user.name,user.email,user.password)
-     .then(res => {
-     handleResponse(res,true);
-     })
-   }
-   if (!newUser && user.email && user.password) {
-    signInWithEmailAndPassword(user.email,user.password)
-     .then(res => {
-      handleResponse(res,true);
-     })
-   }
- e.preventDefault();
- }
-  
- // input condition Set here
- const handleBlur = (event) => {
-   let isFieldValid = true;
-   if (event.target.name === 'email') {
-     isFieldValid = /\S+@\S+\.\S+/.test(event.target.value); 
-   }
-   if (event.target.name === 'password') {
-     const isPassWordValid = event.target.value.length > 5;
-     const passwordHasNumber = /\d{1}/.test (event.target.value);
-     isFieldValid = passwordHasNumber && isPassWordValid ;
-   }
-   if (isFieldValid) {
-     const newUserInfo = {...user};
-     newUserInfo[event.target.name] = event.target.value;
-     setUser(newUserInfo);
-     
-   }
- }
-     return (
-         <div>
-              <h1>this is Login</h1>
-        <div style={{marginLeft:'45%',marginTop:'10%'}}>
+
+  const fBSignIn = () => {
+    handleFBSignIn()
+      .then(res => {
+        console.log(res)
+        handleResponse(res, true)
+
+      })
+
+  };
+
+  // handle Submit Area--------------------------------------------------------
+  const handleSubmit = (e) => {
+    if (newUser && user.email && user.password) {
+      createUserWithEmailAndPassword(user.name, user.email, user.password)
+        .then(res => {
+          handleResponse(res, true);
+        })
+    }
+    if (!newUser && user.email && user.password) {
+      signInWithEmailAndPassword(user.email, user.password)
+        .then(res => {
+          handleResponse(res, true);
+        })
+    }
+    e.preventDefault();
+  }
+
+  // input condition Set here
+  const handleBlur = (event) => {
+    let isFieldValid = true;
+    if (event.target.name === 'email') {
+      isFieldValid = /\S+@\S+\.\S+/.test(event.target.value);
+    }
+    if (event.target.name === 'password') {
+      const isPassWordValid = event.target.value.length > 5;
+      const passwordHasNumber = /\d{1}/.test(event.target.value);
+      isFieldValid = passwordHasNumber && isPassWordValid;
+    }
+    if (isFieldValid) {
+      const newUserInfo = { ...user };
+      newUserInfo[event.target.name] = event.target.value;
+      setUser(newUserInfo);
+
+    }
+  }
+
+
+
+  document.title = "Login page"
+  return (
+    <div>
+      <h1>this is Login</h1>
+      <div style={{ marginLeft: '45%', marginTop: '10%' }}>
         {
-         user.isSignIn ? 
-           <button onClick={signOut} style={{color:'red'}}>sign out</button>
-           :<button onClick={googleSingIn} style={{color:'red'}}>sign in</button>
-       }
-       <br/>
-       <button onClick={fBSignIn}>Sign In using Facebook</button>
-       {/* Facebook Sign In button here ^^*/}
-       {
-         user.isSignIn  && <div>
-         <p>Welcome,{user.name}</p>
-         <p>Email:{user.email}</p>
-         <img src={user.photo} alt=""/>
-       </div>
-       } 
-       <br/>
-         <input type="checkbox" onChange={() => setNewUser(!newUser)} name="newUser" id=""/>
-         <label htmlFor="newUser">New User Sign up</label>
+          user.isSignIn ?
+            <button onClick={signOut} style={{ color: 'red' }}>sign out</button>
+            : <button onClick={googleSingIn} style={{ color: 'red' }}>sign in</button>
+        }
+        <br />
+        <button onClick={fBSignIn}>Sign In using Facebook</button>
+        {/* Facebook Sign In button here ^^*/}
+        {
+          user.isSignIn && <div>
+            <p>Welcome,{user.name}</p>
+            <p>Email:{user.email}</p>
+            <img src={user.photo} alt="" />
+          </div>
+        }
+        <br />
+        <input type="checkbox" onChange={() => setNewUser(!newUser)} name="newUser" id="" />
+        <label htmlFor="newUser">New User Sign up</label>
         <form onSubmit={handleSubmit}>
-        {newUser && <input type="text" name="name" onBlur={handleBlur} placeholder="You Name" required />}
-          <br/>
-          <input type="text" name="email" onBlur={handleBlur} placeholder="Enter your Email" required/>
-          <br/>
-          <input type="password" name="password" onBlur={handleBlur}  id="" placeholder="Enter your password" required/>
-          <br/>
-          <input type="submit" value={newUser ?'Sign up':'Sign In'}/>
-        </form>       
-  
-           <p style={{color:'red'}}>{user.error}</p>
-          {user.success && <p style={{color:'green'}}>User { newUser ? "Created" :"Logged In"} SuccessFully </p>} 
+          {newUser && <input type="text" name="name" onBlur={handleBlur} placeholder="You Name" required />}
+          <br />
+          <input type="text" name="email" onBlur={handleBlur} placeholder="Enter your Email" required />
+          <br />
+          <input type="password" name="password" onBlur={handleBlur} id="" placeholder="Enter your password" required />
+          <br />
+          <input type="submit" value={newUser ? 'Sign up' : 'Sign In'} />
+        </form>
+
+        <p style={{ color: 'red' }}>{user.error}</p>
+        {user.success && <p style={{ color: 'green' }}>User {newUser ? "Created" : "Logged In"} SuccessFully </p>}
       </div>
-      </div>
-      
-     );
- };
- 
- export default Login;
+    </div>
+
+  );
+};
+
+export default Login;
 
 
 
@@ -151,7 +155,7 @@
 // firebase.initializeApp(firebaseConfig);
 
 // const Login = () => {
-    
+
 //     const [loggedInUser,setLoggedInUser] = useContext(UserContext)
 //     const [newUser,setNewUser] = useState(false);
 //   const [user,setUser] = useState({
@@ -161,7 +165,7 @@
 //     photo:'',
 //     password:'',
 //     error:''
-  
+
 //   })
 
 // const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -176,7 +180,7 @@
 //        name:displayName,
 //        email:email,
 //        photo:photoURL
-       
+
 //      }
 //      setUser(signedInUser)
 
@@ -210,7 +214,7 @@
 //     // ...
 //   });
 //  }
- 
+
 // // ---------------------------------------------------------
 
 // // handle Sign Out ---------------------------
@@ -224,7 +228,7 @@
 //        email:'',
 //        error:'',
 //        success:false
-   
+
 //      }
 //      setUser(signedOutUser)
 //    })
@@ -250,7 +254,7 @@
 //       newUserInfo.error = error.message;
 //       newUserInfo.success = false;
 //       setUser(newUserInfo);
-    
+
 //     });
 //   }
 //   if (!newUser && user.email && user.password) {
@@ -262,7 +266,7 @@
 //       setUser(newUserInfo);
 //       setLoggedInUser(newUserInfo);
 //       console.log('sign in user info', res.user);
-      
+
 //     })
 //     .catch(error => {
 //       const newUserInfo = {...user};
@@ -274,7 +278,7 @@
 // e.preventDefault();
 // }
 // // -----------------------------------------------------------------------
- 
+
 // // update User Name ----
 // const updateUserName = name => {
 //       let user = firebase.auth().currentUser;
@@ -307,7 +311,7 @@
 //     const newUserInfo = {...user};
 //     newUserInfo[event.target.name] = event.target.value;
 //     setUser(newUserInfo);
-    
+
 //   }
 // }
 //     return (
@@ -342,12 +346,12 @@
 //          <br/>
 //          <input type="submit" value={newUser ?'Sign up':'Sign In'}/>
 //        </form>       
- 
+
 //           <p style={{color:'red'}}>{user.error}</p>
 //          {user.success && <p style={{color:'green'}}>User { newUser ? "Created" :"Logged In"} SuccessFully </p>} 
 //      </div>
 //      </div>
-     
+
 //     );
 // };
 

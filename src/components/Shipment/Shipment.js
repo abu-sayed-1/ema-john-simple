@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
 import { UserContext } from '../../App';
 import { getDatabaseCart, processOrder } from '../../utilities/databaseManager';
+import ProcessPayment from '../ProcessPayment/ProcessPayment';
 import './Shipment.css'
 
 const Shipment = () => {
@@ -11,7 +12,7 @@ const Shipment = () => {
     const savedCart = getDatabaseCart();
     const orderDetails = { ...loggedInUser, products: savedCart, Shipment: data, orderTime: new Date() }
 
-    fetch('http://localhost:5000/addOrder', {
+    fetch('https://boiling-wave-04634.herokuapp.com/addOrder', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -30,22 +31,30 @@ const Shipment = () => {
   };
 
   return (
+    <div className="row container">
+      <div className="col-md-6">
+        <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>
+          <input name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder="Your name" />
+          {errors.name && <span className="error">Name is required</span>}
 
-    <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>
-      <input name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder="Your name" />
-      {errors.name && <span className="error">Name is required</span>}
+          <input name="email" defaultValue={loggedInUser.email} ref={register({ required: true })} placeholder="Your Email" />
+          {errors.email && <span className="error">Email is required</span>}
 
-      <input name="email" defaultValue={loggedInUser.email} ref={register({ required: true })} placeholder="Your Email" />
-      {errors.email && <span className="error">Email is required</span>}
+          <input name="address" ref={register({ required: true })} placeholder="Your address" />
+          {errors.address && <span className="error">address is required</span>}
 
-      <input name="address" ref={register({ required: true })} placeholder="Your address" />
-      {errors.address && <span className="error">address is required</span>}
+          <input name="phone" ref={register({ required: true })} placeholder="Your Phone Number" />
+          {errors.phone && <span className="error">Phone Number is required</span>}
 
-      <input name="phone" ref={register({ required: true })} placeholder="Your Phone Number" />
-      {errors.phone && <span className="error">Phone Number is required</span>}
+          <input type="submit" />
+        </form>
+      </div>
+      <div className="col-md-6">
+        <h2>Please Pay for me</h2>
+        <ProcessPayment />
+      </div>
+    </div>
 
-      <input type="submit" />
-    </form>
   );
 };
 

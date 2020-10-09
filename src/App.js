@@ -1,39 +1,39 @@
 
- import React, { createContext, useState } from 'react';
- import './App.css';
- import Header from './components/HEADER/Header';
- import Shop from './components/Shop/Shop';
- import {
-   BrowserRouter as Router,
-   Switch,
-   Route,
- } from "react-router-dom";
- import Review from './components/Review/Review';
- import Inventory from './components/Inventory/Inventory';
- import NotFound from './components/NotFound/NotFound';
+import React, { createContext, useState } from 'react';
+import './App.css';
+import Header from './components/HEADER/Header';
+import Shop from './components/Shop/Shop';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import Review from './components/Review/Review';
+import Inventory from './components/Inventory/Inventory';
+import NotFound from './components/NotFound/NotFound';
 import ProductDetail from './components/ProductDetail/ProductDetail';
 import Shipment from './components/Shipment/Shipment';
 import Login from './components/Login/Login';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
- 
+
 export const UserContext = createContext();
 
- function App() {
-  const [loggedInUser,setLoggedInUser] = useState({});
-   return (
-     
-     <UserContext.Provider value={[loggedInUser,setLoggedInUser]}>
+function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
+  return (
+
+    <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
       <Router>
-       <Header></Header>
+        <Header></Header>
         <Switch>
           <Route exact path='/shop'>
-          <Shop></Shop>
+            <Shop />
           </Route>
           <Route path="/review">
-           <Review></Review>
+            <Review />
           </Route>
           <PrivateRoute path="/inventory">
-            <Inventory></Inventory>
+            <Inventory />
           </PrivateRoute>
           <Route path="/login">
             <Login />
@@ -42,27 +42,27 @@ export const UserContext = createContext();
             <Shipment />
           </PrivateRoute>
           <Route exact path="/">
-           <Shop></Shop>
+            <Shop />
           </Route>
           <Route path="/product/:productKey">
-           <ProductDetail></ProductDetail>
+            <ProductDetail />
           </Route>
           <Route path="*">
-          <NotFound></NotFound>
-         </Route>
+            <NotFound></NotFound>
+          </Route>
         </Switch>
       </Router>
-     </UserContext.Provider>
-    
-   );
- }
- 
- export default App;
- 
+    </UserContext.Provider>
+
+  );
+}
+
+export default App;
 
 
 
- 
+
+
 
 
 

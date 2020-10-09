@@ -7,23 +7,20 @@ import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import { useEffect } from 'react';
 const Shop = () => {
-    // const first10 = fakeData.slice(0,10);
     const [products, setProducts] = useState([])
-    // console.log(products)
     const [cart, setCart] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch('https://boiling-wave-04634.herokuapp.com/products')
             .then(res => res.json())
             .then(data => setProducts(data))
     }, [])
 
-
-
     useEffect(() => {
         const savedCart = getDatabaseCart();
+        console.log(savedCart);
         const productKey = Object.keys(savedCart);
-        fetch('http://localhost:5000/productsByKeys', {
+        fetch('https://boiling-wave-04634.herokuapp.com/productsByKeys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -52,10 +49,13 @@ const Shop = () => {
         setCart(newCart);
         addToDatabaseCart(product.key, count);
     }
-
+   document.title="Shop more"
     return (
         <div className="twin-container">
             <div className="product-container">
+                {/* {
+                    products.length === 0 && <p>Loading....</p>
+                } */}
                 {
                     products.map(pd =>
                         <Product
@@ -65,12 +65,10 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container">
-
                 <Cart cart={cart}></Cart>
                 <Link to="/review">
                     <button className="main-btn"> Review Order </button>
                 </Link>
-
             </div>
         </div>
     );

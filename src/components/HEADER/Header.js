@@ -12,7 +12,7 @@ const Header = () => {
                 <Link to="/shop">shop</Link>
                 <Link to="/review">Order Review</Link>
                 <Link to="/inventory">Manage Inventory</Link>
-                <button onClick={() => setLoggedInUser({})}>Sign Out</button>
+                <button onClick={() => setLoggedInUser({}) || sessionStorage.getItem('token', false)}>Sign Out</button>
             </nav>
         </div>
     );
