@@ -7,14 +7,15 @@ import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import { useEffect } from 'react';
 const Shop = () => {
-    const [products, setProducts] = useState([])
-    const [cart, setCart] = useState([])
-
+    const [products, setProducts] = useState([]);
+    const [cart, setCart] = useState([]);
+    const [search, setSearch] = useState('');
+// ?search' + search
     useEffect(() => {
-        fetch('https://boiling-wave-04634.herokuapp.com/products')
+        fetch('http://localhost:5000/products?search='+search)
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, [])
+    }, [search])
 
     useEffect(() => {
         const savedCart = getDatabaseCart();
@@ -30,6 +31,13 @@ const Shop = () => {
             .then(res => res.json())
             .then(data => setCart(data))
     }, []);
+
+    // Search Box Method here--------------------
+    const handleSearch = event => {
+        setSearch(event.target.value);
+    }
+
+
 
     const handleAddProduct = (product) => {
         const toBeAddedKey = product.key;
@@ -49,10 +57,14 @@ const Shop = () => {
         setCart(newCart);
         addToDatabaseCart(product.key, count);
     }
-   document.title="Shop more"
+    document.title = "Shop more"
     return (
         <div className="twin-container">
             <div className="product-container">
+
+
+                <input type="text" onBlur={handleSearch} className="product_search" />
+
                 {/* {
                     products.length === 0 && <p>Loading....</p>
                 } */}

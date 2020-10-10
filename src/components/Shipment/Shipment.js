@@ -50,7 +50,7 @@ const Shipment = () => {
 
 
     <div className="row container">
-      <div className="col-md-6" style={{display:shippingData ? 'none':'block'}}>
+      <div className="col-md-6" style={{ display: shippingData ? 'none' : 'block' }}>
         <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>
           <input name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder="Your name" />
           {errors.name && <span className="error">Name is required</span>}
@@ -67,7 +67,7 @@ const Shipment = () => {
           <input type="submit" />
         </form>
       </div>
-      <div className="col-md-6" style={{display:shippingData ? 'block':'none'}}>
+      <div className="col-md-6" style={{ display: shippingData ? 'block' : 'none' }}>
         <h2>Please Pay for me</h2>
         <ProcessPayment handlePayment={handlePaymentSuccess}></ProcessPayment>
       </div>
