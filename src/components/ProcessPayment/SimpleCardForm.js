@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-const SimpleCardForm = () => {
+const SimpleCardForm = ({ handlePayment }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [ paymentError, setPaymentError] = useState(null);
-  const [ paymentSuccess, setPaymentSuccess] = useState(null);
+  const [paymentError, setPaymentError] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(null);
 
 
   const handleSubmit = async (event) => {
@@ -24,7 +24,7 @@ const SimpleCardForm = () => {
     const cardElement = elements.getElement(CardElement);
 
     // Use your card Element with other Stripe.js APIs
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
     });
@@ -34,30 +34,30 @@ const SimpleCardForm = () => {
       setPaymentSuccess(null)
       console.log('[error]', error);
 
-      
     } else {
-      setPaymentSuccess(paymentMethod.id)
+      setPaymentSuccess(paymentMethod.id);
+      handlePayment(paymentMethod.id);
       setPaymentError(null)
     }
   };
 
   return (
-  <div>
+    <div>
       <form onSubmit={handleSubmit}>
-      <CardElement />
-      <button type="submit" disabled={!stripe}>
-        Pay
+        <CardElement />
+        <button type="submit" disabled={!stripe}>
+          Pay
       </button>
-    </form>
-    {
-      paymentError && <p style={{color:'red'}}>{paymentError}</p>
-    }
- {
-   paymentSuccess && <p style={{color:'green'}}>Your Payment was successfully</p>
- }
+      </form>
+      {
+        paymentError && <p style={{ color: 'red' }}>{paymentError}</p>
+      }
+      {
+        paymentSuccess && <p style={{ color: 'green' }}>Your Payment was successfully</p>
+      }
 
-{/* {       paymentError.message ?<p>{paymentError.message}</p>:'rakib'} */}
-  </div>
+      {/* {       paymentError.message ?<p>{paymentError.message}</p>:'rakib'} */}
+    </div>
   );
 };
 
